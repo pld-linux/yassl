@@ -1,19 +1,25 @@
-#
 # Conditional build:
 %bcond_with	tests		# build with tests
 #
-# TODO
-# - bundled openssl?
-# - shared lib, -devel, -static
 Summary:	Yet Another SSL Library
 Name:		yassl
 Version:	1.5.8
-Release:	0.1
+Release:	0.2
 License:	GPL
 Group:		Libraries
 URL:		http://www.yassl.com/
 Source0:	http://www.yassl.com/%{name}-%{version}.zip
 # Source0-md5:	2f489c20fb93629ac644352d59e2c998
+Source1:	http://autoconf-archive.cryp.to/check_zlib.m4
+# Source1-md5:	b578aabed5797b035075512a6c9532c5
+Source2:	http://autoconf-archive.cryp.to/lib_socket_nsl.m4
+# Source2-md5:	d719eef6e1f279b1fa0ed3637865a31d
+Source3:	http://autoconf-archive.cryp.to/acx_pthread.m4
+# Source3-md5:	4be209a685bd5d8bca16f6e4fdb25dc6
+Patch0:		%{name}-am.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	sed >= 4.0
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -22,10 +28,40 @@ yaSSL is an SSL version 3 and TLS version 1 (client and server
 supporting) C++ library. yaSSL provides a simple API and even provides
 an additional OpenSSL compatibility API.
 
+%package devel
+Summary:	Header files for yaSSL library
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header files for yaSSL library.
+
+%package static
+Summary:	Static yaSSL library
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static yaSSL library.
+
 %prep
 %setup -q
 
+# undos the source
+find '(' -name '*.am' -o -name '*.in' ')' -print0 | xargs -0 sed -i -e 's,\r$,,'
+
+%patch0 -p1
+mkdir -p m4
+cp -a %{SOURCE1} m4
+cp -a %{SOURCE2} m4
+cp -a %{SOURCE3} m4
+
 %build
+%{__libtoolize}
+%{__aclocal} -I m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	%{?debug:--enable-debug} \
 	--with-zlib=/usr
@@ -48,9 +84,17 @@ cp -a include/* $RPM_BUILD_ROOT%{_includedir}/yassl
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
 %doc README
+%attr(755,root,root) %{_libdir}/libtaocrypt.so.*.*.*
+%attr(755,root,root) %{_libdir}/libyassl.so.*.*.*
+
+%files devel
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/benchmark
 %attr(755,root,root) %{_bindir}/client
 %attr(755,root,root) %{_bindir}/echoclient
@@ -59,5 +103,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/test
 %attr(755,root,root) %{_bindir}/testsuite
 %{_includedir}/yassl
+%{_libdir}/libtaocrypt.la
+%{_libdir}/libtaocrypt.so
+%{_libdir}/libyassl.la
+%{_libdir}/libyassl.so
+
+%files static
+%defattr(644,root,root,755)
 %{_libdir}/libtaocrypt.a
 %{_libdir}/libyassl.a
