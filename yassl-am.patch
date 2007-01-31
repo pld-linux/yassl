@@ -1,0 +1,80 @@
+--- yassl-1.5.8/configure.in~	2007-01-31 23:46:35.170051999 +0200
++++ yassl-1.5.8/configure.in	2007-01-31 23:47:05.910742022 +0200
+@@ -13,7 +13,7 @@
+ 
+ AC_PROG_CXX
+ AC_PROG_INSTALL
+-AC_PROG_RANLIB
++AC_PROG_LIBTOOL
+ 
+ 
+ AC_C_BIGENDIAN
+--- yassl-1.5.8/src/Makefile.am~	2006-10-26 00:08:32.000000000 +0300
++++ yassl-1.5.8/src/Makefile.am	2007-01-31 23:43:25.885803445 +0200
+@@ -1,7 +1,7 @@
+ INCLUDES = -I../include -I../taocrypt/include -I../taocrypt/mySTL
+ 
+-lib_LIBRARIES = libyassl.a
+-libyassl_a_SOURCES = buffer.cpp cert_wrapper.cpp crypto_wrapper.cpp \
++lib_LTLIBRARIES = libyassl.la
++libyassl_la_SOURCES = buffer.cpp cert_wrapper.cpp crypto_wrapper.cpp \
+ 	handshake.cpp lock.cpp log.cpp socket_wrapper.cpp ssl.cpp \
+ 	template_instnt.cpp timer.cpp yassl_imp.cpp yassl_error.cpp yassl_int.cpp
+ AM_CXXFLAGS = -Wall -Wno-unused
+--- yassl-1.5.8/examples/client/Makefile.am~	2007-01-31 23:54:26.800639559 +0200
++++ yassl-1.5.8/examples/client/Makefile.am	2007-01-31 23:54:28.940687606 +0200
+@@ -4,5 +4,5 @@
+ client_CXXFLAGS = -Wall -Wno-unused
+ client_LDFLAGS  = -L../../src/ -L../../taocrypt/src
+ client_LDADD    = -lyassl -ltaocrypt
+-client_DEPENDENCIES = ../../src/libyassl.a ../../taocrypt/src/libtaocrypt.a
++client_DEPENDENCIES = ../../src/libyassl.la ../../taocrypt/src/libtaocrypt.la
+ EXTRA_DIST = client.dsp
+--- yassl-1.5.8/taocrypt/src/Makefile.am~	2007-01-31 23:53:03.508769590 +0200
++++ yassl-1.5.8/taocrypt/src/Makefile.am	2007-01-31 23:55:04.091476782 +0200
+@@ -1,7 +1,7 @@
+ INCLUDES = -I../include -I../mySTL
+ 
+-lib_LIBRARIES = libtaocrypt.a
+-libtaocrypt_a_SOURCES  = aes.cpp aestables.cpp algebra.cpp arc4.cpp asn.cpp \
++lib_LTLIBRARIES = libtaocrypt.la
++libtaocrypt_la_SOURCES  = aes.cpp aestables.cpp algebra.cpp arc4.cpp asn.cpp \
+ 	bftables.cpp blowfish.cpp coding.cpp dh.cpp des.cpp dsa.cpp file.cpp \
+     hash.cpp integer.cpp md2.cpp md4.cpp md5.cpp misc.cpp random.cpp \
+     ripemd.cpp rsa.cpp sha.cpp template_instnt.cpp tftables.cpp twofish.cpp \
+--- yassl-1.5.8/examples/server/Makefile.am~	2007-01-31 23:53:03.538770264 +0200
++++ yassl-1.5.8/examples/server/Makefile.am	2007-01-31 23:56:20.733191571 +0200
+@@ -4,5 +4,5 @@
+ server_CXXFLAGS = -Wall -Wno-unused
+ server_LDFLAGS  = -L../../src/ -L../../taocrypt/src
+ server_LDADD    = -lyassl -ltaocrypt
+-server_DEPENDENCIES = ../../src/libyassl.a ../../taocrypt/src/libtaocrypt.a
++server_DEPENDENCIES = ../../src/libyassl.la ../../taocrypt/src/libtaocrypt.la
+ EXTRA_DIST = server.dsp
+--- yassl-1.5.8/examples/echoclient/Makefile.am~	2007-01-31 23:53:03.538770264 +0200
++++ yassl-1.5.8/examples/echoclient/Makefile.am	2007-01-31 23:56:42.053668627 +0200
+@@ -4,5 +4,5 @@
+ echoclient_CXXFLAGS = -Wall -Wno-unused
+ echoclient_LDFLAGS  = -L../../src/ -L../../taocrypt/src
+ echoclient_LDADD    = -lyassl -ltaocrypt
+-echoclient_DEPENDENCIES = ../../src/libyassl.a ../../taocrypt/src/libtaocrypt.a
++echoclient_DEPENDENCIES = ../../src/libyassl.la ../../taocrypt/src/libtaocrypt.la
+ EXTRA_DIST = echoclient.dsp input quit
+--- yassl-1.5.8/examples/echoserver/Makefile.am~	2007-01-31 23:53:03.538770264 +0200
++++ yassl-1.5.8/examples/echoserver/Makefile.am	2007-01-31 23:57:00.924090872 +0200
+@@ -4,5 +4,5 @@
+ echoserver_CXXFLAGS = -Wall -Wno-unused
+ echoserver_LDFLAGS  = -L../../src/ -L../../taocrypt/src
+ echoserver_LDADD    = -lyassl -ltaocrypt
+-echoserver_DEPENDENCIES = ../../src/libyassl.a ../../taocrypt/src/libtaocrypt.a
++echoserver_DEPENDENCIES = ../../src/libyassl.la ../../taocrypt/src/libtaocrypt.la
+ EXTRA_DIST = echoserver.dsp
+--- yassl-1.5.8/testsuite/Makefile.am~	2007-01-31 23:53:03.548770488 +0200
++++ yassl-1.5.8/testsuite/Makefile.am	2007-01-31 23:57:22.064563925 +0200
+@@ -7,5 +7,5 @@
+ testsuite_LDFLAGS  = -L../src/ -L../taocrypt/src
+ testsuite_CXXFLAGS = -DNO_MAIN_DRIVER -Wall -Wno-unused
+ testsuite_LDADD    = -lyassl -ltaocrypt
+-testsuite_DEPENDENCIES = ../src/libyassl.a ../taocrypt/src/libtaocrypt.a
++testsuite_DEPENDENCIES = ../src/libyassl.la ../taocrypt/src/libtaocrypt.la
+ EXTRA_DIST = testsuite.dsp test.hpp input quit make.bat
