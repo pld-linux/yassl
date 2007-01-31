@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_with	tests		# build with tests
+#
 # TODO
 # - bundled openssl?
 # - shared lib, -devel, -static
@@ -27,6 +31,11 @@ an additional OpenSSL compatibility API.
 	--with-zlib=/usr
 
 %{__make}
+
+%if %{with tests}
+cd testsuite
+./testsuite
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
