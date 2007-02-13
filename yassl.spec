@@ -1,13 +1,14 @@
+#
 # Conditional build:
 %bcond_with	tests		# build with tests
 #
 Summary:	Yet Another SSL Library
+Summary(pl.UTF-8):	Jeszcze jedna biblioteka SSL
 Name:		yassl
 Version:	1.5.8
 Release:	0.2
 License:	GPL
 Group:		Libraries
-URL:		http://www.yassl.com/
 Source0:	http://www.yassl.com/%{name}-%{version}.zip
 # Source0-md5:	2f489c20fb93629ac644352d59e2c998
 Source1:	http://autoconf-archive.cryp.to/check_zlib.m4
@@ -17,6 +18,7 @@ Source2:	http://autoconf-archive.cryp.to/lib_socket_nsl.m4
 Source3:	http://autoconf-archive.cryp.to/acx_pthread.m4
 # Source3-md5:	4be209a685bd5d8bca16f6e4fdb25dc6
 Patch0:		%{name}-am.patch
+URL:		http://www.yassl.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	sed >= 4.0
@@ -28,21 +30,34 @@ yaSSL is an SSL version 3 and TLS version 1 (client and server
 supporting) C++ library. yaSSL provides a simple API and even provides
 an additional OpenSSL compatibility API.
 
+%description -l pl.UTF-8
+yaSSL to biblioteak C++ obsługująca SSL w wersji 3 i TLS w wersji 1
+(dla klienta i serwera). yaSSL udostępnia proste API, a nawet
+dodatkowe API dla kompatybilności z OpenSSL.
+
 %package devel
 Summary:	Header files for yaSSL library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki yaSSL
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for yaSSL library.
 
+%description devel -l pl.UTF-8
+Pliki nagłówkowe biblioteki yaSSL.
+
 %package static
 Summary:	Static yaSSL library
+Summary(pl.UTF-8):	Statyczna biblioteka yaSSL
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static yaSSL library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka yaSSL.
 
 %prep
 %setup -q
@@ -102,11 +117,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/server
 %attr(755,root,root) %{_bindir}/test
 %attr(755,root,root) %{_bindir}/testsuite
-%{_includedir}/yassl
+%attr(755,root,root) %{_libdir}/libtaocrypt.so
 %{_libdir}/libtaocrypt.la
-%{_libdir}/libtaocrypt.so
+%attr(755,root,root) %{_libdir}/libyassl.so
 %{_libdir}/libyassl.la
-%{_libdir}/libyassl.so
+%{_includedir}/yassl
 
 %files static
 %defattr(644,root,root,755)
