@@ -22,6 +22,7 @@ URL:		http://www.yassl.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	sed >= 4.0
+BuildRequires:	unzip
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
