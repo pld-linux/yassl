@@ -66,7 +66,7 @@ Statyczna biblioteka yaSSL.
 # undos the source
 find '(' -name '*.am' -o -name '*.in' ')' -print0 | xargs -0 sed -i -e 's,\r$,,'
 
-%patch0 -p1
+%patch -P0 -p1
 mkdir -p m4
 cp -a %{SOURCE1} m4
 cp -a %{SOURCE2} m4
